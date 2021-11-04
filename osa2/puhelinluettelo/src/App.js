@@ -92,47 +92,57 @@ const App = () => {
     }
     if (persons.some(person => person.name === newName)) {
       if (window.confirm(`${newName} is already added to phonebook, replace the old number with a new one`)) {
+
         const copyPersonId = persons.find(p => p.name === newName).id
+
         personService
           .replaceNumber(personObject, copyPersonId)
           .then(response => {
             setPersons(persons.map(person => person.name === newName ? response : person))
+            setSuccessMessage(
+              `Changed ${personObject.name}'s number`
+            )
+            setTimeout(() => {
+              setSuccessMessage(null)
+            }, 3000)
           })
           .catch(error => {
-            if (error !== null) {
-              setError(
-                `Information of ${personObject.name} has already been removed from server`
-              )
-              setTimeout(() => {
-                setError(null)
-              }, 3000)
-              const copyPersons = [...persons]
-              const alreadyDeleted = persons.find(person => person.name === newName)
-              copyPersons.splice(copyPersons.indexOf(alreadyDeleted), 1)
-              setPersons(copyPersons)
-            } else {
-              setSuccessMessage(
-                `Changed ${personObject.name}'s number`
-              )
-              setTimeout(() => {
-                setSuccessMessage(null)
-              }, 3000)
-            }
+            setError(
+              `Information of ${personObject.name} has already been removed from server`
+            )
+            setTimeout(() => {
+              setError(null)
+            }, 3000)
+            const copyPersons = [...persons]
+            const alreadyDeleted = persons.find(person => person.name === newName)
+            copyPersons.splice(copyPersons.indexOf(alreadyDeleted), 1)
+            setPersons(copyPersons)
           })
+
       }
     } else {
+
       personService
         .create(personObject)
         .then(returnedPerson => {
           setPersons(persons.concat(returnedPerson))
+          setSuccessMessage(
+            `Added ${personObject.name}`
+          )
+          setTimeout(() => {
+            setSuccessMessage(null)
+          }, 3000)
         })
-      setSuccessMessage(
-        `Added ${personObject.name}`
-      )
-      setTimeout(() => {
-        setSuccessMessage(null)
-      }, 3000)
+        .catch(error => {
+          setError(
+            error.response.data.error
+          )
+          setTimeout(() => {
+            setError(null)
+          }, 3000)
+        })
     }
+    
     setNewName('')
     setNewNumber('')
     setFilter('')
