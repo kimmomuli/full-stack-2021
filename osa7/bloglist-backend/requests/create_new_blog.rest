@@ -1,0 +1,10 @@
+POST http://localhost:3003/api/blogs
+Content-Type: application/json
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IlRFU1RJIiwiaWQiOiI2MTkxZWM4ODE5YTQ1YzVmNWM5MGQ0NTAiLCJpYXQiOjE2MzY5NTMyMzJ9.vnx0YlpBhEznITehMiWvaTgvn41D4bqEx--T413wfaE
+
+{
+  "title": "testi",
+  "author": "kirjoittaja",
+  "url": "https://testi.com",
+  "likes": 987234
+}
